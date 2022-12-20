@@ -122,5 +122,6 @@ Config::set('sessions.lifetime', 1);
         @yield('content')
     </main>
 </div>
+@stack('other-scripts')
 </body>
 </html>

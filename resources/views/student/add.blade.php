@@ -1,25 +1,26 @@
 @extends('layouts.app')
 @section('content')
+    {{-- Use add and update student just with one form  --}}
     <main>
         <div class="container-fluid">
             <div class="row ">
                 <div class="col-md-6 mx-auto">
                     <div class="card m-5">
                         @if (isset($student))
+                            {{-- condition if request have data obj --}}
                             <form class="studentForm" method="post" action="{{ route('update', $student->id) }}">
                                 @method('PUT')
                                 @csrf
                                 <div class="card-header text-light" style="background-color:#A39624;">
-                                    <h4>学生を更新</h4>
+                                    <h4>生徒更新</h4>
                                 </div>
                             @else
                                 <form class="studentForm" method="post" action="{{ route('store') }}">
                                     @csrf
                                     <div class="card-header text-light" style="background-color:#A39624;">
-                                        <h4>新しい学生を作成</h4>
+                                        <h4>生徒追加</h4>
                                     </div>
                         @endif
-
                         <div class="card-body bg-light">
                             <div id="message"></div>
                             <div class="form-group mt-3">
@@ -28,13 +29,12 @@
                                     <input type="text" name="roll_no" id="roll_no"
                                         class="form-control  @error('roll_no') is-invalid @enderror"
                                         value="{{ old('roll_no', $student->roll_no ?? '') }}" disabled>
+                                    {{-- disable input box if update --}}
                                 @else
                                     <input type="text" name="roll_no" id="roll_no"
                                         class="form-control  @error('roll_no') is-invalid @enderror"
                                         value="{{ old('roll_no', $student->roll_no ?? '') }}">
                                 @endif
-
-
                                 @error('roll_no')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -81,37 +81,7 @@
             </div>
         </div>
     </main>
-    <script>
-        $(document).ready(function() {
-            $("#roll_no").on("change", function() {
-                var id = this.value;
-                $.ajax({
-                    url: "/students/fetch-student/" + id,
-                    type: "GET",
-                    dataType: 'json',
-                    success: function(result) {
-                        $.each(result, function(key, value) {
-                            $("#student_name").val(value.student_name);
-                            $("#age").val(value.age);
-                        });
-                    },
-                });
-            });
-            $(document).on("click", "#clearbtn", function(e) {
-                e.preventDefault();
-                $(".studentForm")[0].reset();
-                $("#message").html("");
-                $("span").html("");
-                $("#roll_no").val("");
-                $("#student_name").val("");
-                $("#age").val("");
-                $(".invalid-feedback").hide();
-                $(".form-group").find('.is-invalid').removeClass("is-invalid");
-            });
-            $('form input[type=text]').focus(function() {
-                $(this).siblings(".invalid-feedback").hide();
-                $(this).parent(".form-group").find('.is-invalid').removeClass("is-invalid");
-            });
-        });
-    </script>
+    @push('other-scripts')
+        <script type="text/javascript" src="{{ URL::asset('js/student/add.js') }}"></script>
+    @endpush
 @endsection

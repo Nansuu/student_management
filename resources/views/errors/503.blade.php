@@ -16,6 +16,7 @@
     <div class="wrapper">
         <div class="container-fluid">
             <div class="row">
+                {{-- show this page if something happened to website backend --}}
                 <div class="col-md-12 m-3">
                 <div class="alert alert-danger alert-dismissible fade show"><p style="text-align:center">このシステムは進行中です。</p></div>
                 </div>
